@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Habit Dashboard</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 30px auto;
+    }
+    .habit {
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+    }
+    .habit-title {
+      font-weight: bold;
+    }
+    .actions a {
+      margin-right: 10px;
+    }
+    .dashboard-buttons {
+      margin-top: 30px;
+    }
+    .dashboard-buttons a {
+      margin-right: 15px;
+      padding: 6px 12px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Welcome, {{user.name}} 👋</h1>
+
+  <h2>Your Habits</h2>
+
+  <div id="habitList" data-habits='{{json habits}}'>
+    {{#each habits}}
+      <div class="habit">
+        <div class="habit-title">📘 {{this.title}} <em>({{this.frequency}})</em></div>
+        🔥 <strong>Streak:</strong> {{this.streak}} days
+        <div class="actions">
+          <a href="/habits/edit/{{this._id}}">Edit</a>
+          <a href="/habits/delete/{{this._id}}">Delete</a>
+          <a href="/logs/add/{{this._id}}">Log Today</a>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+
+  <div class="dashboard-buttons">
+    <a href="/habits/add">➕ Add New Habit</a>
+    <a href="/analytics">📊 View Analytics</a>
+    <a href="/logout">🚪 Logout</a>
+  </div>
+
+</body>
+</html>

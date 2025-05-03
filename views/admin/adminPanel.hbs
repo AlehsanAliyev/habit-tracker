@@ -1,0 +1,14 @@
+<h2>Admin Panel</h2>
+
+<a href="/habits"><button>← Back to Dashboard</button></a>
+
+<h3>All Users</h3>
+
+<ul>
+  {{#each users}}
+    <li>
+      <strong>{{username}}</strong> ({{email}})
+      <a href="/admin/user/{{_id}}/habits">View Habits</a>
+    </li>
+  {{/each}}
+</ul>

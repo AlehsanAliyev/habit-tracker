@@ -1,0 +1,15 @@
+<h2>Edit Habit</h2>
+
+<form action="/habits/edit/{{habit._id}}" method="POST">
+  <label for="title">Habit Title:</label>
+  <input type="text" name="title" value="{{habit.title}}" required />
+
+  <label for="frequency">Frequency:</label>
+  <select name="frequency">
+    <option value="daily" {{#ifEquals habit.frequency "daily"}}selected{{/ifEquals}}>Daily</option>
+    <option value="weekly" {{#ifEquals habit.frequency "weekly"}}selected{{/ifEquals}}>Weekly</option>
+    <option value="monthly" {{#ifEquals habit.frequency "monthly"}}selected{{/ifEquals}}>Monthly</option>
+  </select>
+
+  <button type="submit">Update Habit</button>
+</form>

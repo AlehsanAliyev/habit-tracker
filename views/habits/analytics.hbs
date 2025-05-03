@@ -1,0 +1,50 @@
+<h2>Habit Analytics (Past {{range}} Days)</h2>
+
+<a href="/habits"><button>← Back to Dashboard</button></a>
+
+<form method="GET" action="/habits/analytics" style="margin-top: 10px;">
+  <label for="range">Select Range:</label>
+  <select name="range" onchange="this.form.submit()">
+    <option value="7" {{#ifEquals range 7}}selected{{/ifEquals}}>Past 7 Days</option>
+    <option value="30" {{#ifEquals range 30}}selected{{/ifEquals}}>Past 30 Days</option>
+  </select>
+</form>
+
+{{#if analytics.length}}
+  <div style="max-width: 700px; margin-top: 30px;">
+    <canvas id="analyticsChart"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('analyticsChart').getContext('2d');
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{{labels}}},
+        datasets: [{
+          label: 'Completion %',
+          data: {{{data}}},
+          backgroundColor: 'rgba(54, 162, 235, 0.7)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              stepSize: 10
+            }
+          }
+        }
+      }
+    });
+  </script>
+{{else}}
+  <p style="margin-top: 20px;">📭 No log data found. Start tracking your habits!</p>
+{{/if}}

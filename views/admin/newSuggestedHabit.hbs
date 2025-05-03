@@ -1,0 +1,15 @@
+<h2>New Suggested Habit</h2>
+
+<form action="/admin/suggested/new" method="POST">
+  <label>Title:</label>
+  <input type="text" name="title" required>
+
+  <label>Frequency:</label>
+  <select name="frequency">
+    <option value="daily">Daily</option>
+    <option value="weekly">Weekly</option>
+    <option value="monthly">Monthly</option>
+  </select>
+
+  <button type="submit">Add</button>
+</form>

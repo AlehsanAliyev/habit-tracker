@@ -1,0 +1,12 @@
+<h2>Suggested Habits</h2>
+
+<a href="/admin"><button>← Back to Admin Panel</button></a>
+<a href="/admin/suggested/new"><button>Add New Suggestion</button></a>
+
+<ul>
+  {{#each suggestions}}
+    <li>
+      <strong>{{title}}</strong> ({{frequency}})
+    </li>
+  {{/each}}
+</ul>

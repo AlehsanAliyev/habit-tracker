@@ -1,0 +1,13 @@
+<h2>{{user.username}}'s Habits</h2>
+
+<a href="/admin"><button>← Back to Admin Panel</button></a>
+
+{{#if habits.length}}
+  <ul>
+    {{#each habits}}
+      <li><strong>{{title}}</strong> ({{frequency}})</li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>This user has no habits.</p>
+{{/if}}

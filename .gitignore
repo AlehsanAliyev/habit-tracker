@@ -1,0 +1,33 @@
+# Node modules & system
+node_modules/
+.env
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# IDE/editor
+.vscode/
+.idea/
+
+# Session & temp
+*.sqlite
+*.pid
+*.cache
+*.bak
+
+# Public uploads or media (optional)
+public/uploads/
+
+# View engine partials cache (if exists)
+views/partials/__compiled/
+
+# Optional: skip test AI folder
+ai/
+voice/
+transcribe_tmp/
+
+# OS
+*.swp
