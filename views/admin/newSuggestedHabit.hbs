@@ -1,15 +1,85 @@
-<h2>New Suggested Habit</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>New Suggested Habit</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f7fa;
+      padding: 2rem;
+      margin: 0;
+    }
 
-<form action="/admin/suggested/new" method="POST">
-  <label>Title:</label>
-  <input type="text" name="title" required>
+    .form-container {
+      max-width: 500px;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      margin: 0 auto;
+    }
 
-  <label>Frequency:</label>
-  <select name="frequency">
-    <option value="daily">Daily</option>
-    <option value="weekly">Weekly</option>
-    <option value="monthly">Monthly</option>
-  </select>
+    h2 {
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #333;
+    }
 
-  <button type="submit">Add</button>
-</form>
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #444;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1.5rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>💡 New Suggested Habit</h2>
+
+    <form action="/admin/suggested/new" method="POST">
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" required>
+
+      <label for="frequency">Frequency:</label>
+      <select id="frequency" name="frequency">
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+      </select>
+
+      <button type="submit">➕ Add Suggested Habit</button>
+    </form>
+  </div>
+
+</body>
+</html>

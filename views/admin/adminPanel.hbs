@@ -1,14 +1,105 @@
-<h2>Admin Panel</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 2rem;
+    }
 
-<a href="/habits"><button>← Back to Dashboard</button></a>
+    h2 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
 
-<h3>All Users</h3>
+    h3 {
+      margin-top: 2rem;
+      font-size: 1.3rem;
+      color: #444;
+    }
 
-<ul>
-  {{#each users}}
-    <li>
-      <strong>{{username}}</strong> ({{email}})
-      <a href="/admin/user/{{_id}}/habits">View Habits</a>
-    </li>
-  {{/each}}
-</ul>
+    .btn-back {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      background: #e2e8f0;
+      color: #333;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .btn-back:hover {
+      background: #cbd5e1;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 1rem;
+    }
+
+    li {
+      background: #fff;
+      padding: 1rem 1.2rem;
+      margin-bottom: 0.8rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .user-info {
+      font-size: 1rem;
+      color: #222;
+    }
+
+    .user-info strong {
+      color: #111;
+    }
+
+    .user-link a {
+      background: #4CAF50;
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .user-link a:hover {
+      background: #43a047;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🛡️ Admin Panel</h2>
+
+  <a href="/habits" class="btn-back">← Back to Dashboard</a>
+
+  <h3>All Registered Users</h3>
+
+  <ul>
+    {{#each users}}
+      <li>
+        <div class="user-info">
+          <strong>{{username}}</strong> ({{email}})
+        </div>
+        <div class="user-link">
+          <a href="/admin/user/{{_id}}/habits">View Habits</a>
+        </div>
+      </li>
+    {{/each}}
+  </ul>
+
+</body>
+</html>

@@ -1,24 +1,74 @@
 <h2>Habit Analytics (Past {{range}} Days)</h2>
 
-<a href="/habits"><button>← Back to Dashboard</button></a>
+<a href="/habits" style="display: inline-block; margin-bottom: 1rem;">
+  ← Back to Dashboard
+</a>
 
-<form method="GET" action="/habits/analytics" style="margin-top: 10px;">
+<form method="GET" action="/habits/analytics" style="margin-bottom: 1rem;">
   <label for="range">Select Range:</label>
   <select name="range" onchange="this.form.submit()">
     <option value="7" {{#ifEquals range 7}}selected{{/ifEquals}}>Past 7 Days</option>
     <option value="30" {{#ifEquals range 30}}selected{{/ifEquals}}>Past 30 Days</option>
   </select>
+
+  <label for="sort"> | Sort by:</label>
+  <select name="sort" onchange="this.form.submit()">
+    <option value="completion">Completion %</option>
+    <option value="average">Avg. Score</option>
+    <option value="streak">Streak</option>
+  </select>
 </form>
 
+{{#if bestHabit}}
+  <p><strong>🏆 Best Habit:</strong> {{bestHabit.title}}</p>
+{{/if}}
+{{#if worstHabit}}
+  <p><strong>🚧 Needs Focus:</strong> {{worstHabit.title}}</p>
+{{/if}}
+
 {{#if analytics.length}}
-  <div style="max-width: 700px; margin-top: 30px;">
+  <!-- 📊 Chart Section -->
+  <div style="max-width: 700px; margin-top: 20px;">
     <canvas id="analyticsChart"></canvas>
   </div>
 
+  <!-- 🧠 Habit Detail Cards -->
+  <div class="habit-grid" style="margin-top: 2rem;">
+    {{#each analytics}}
+      <div class="habit-card">
+        <h3>{{title}}</h3>
+
+        <p>📊 Completion: {{percentage}}% | Avg. Score: {{averageScore}} / 2</p>
+
+        {{#if (gt streak 0)}}
+          <p>🔥 Streak: {{streak}} day{{#if (gt streak 1)}}s{{/if}}</p>
+        {{/if}}
+
+        {{#if badge}}
+          <p>🏅 {{badge}}</p>
+        {{/if}}
+
+        <div class="mini-grid">
+          {{#each heatmap}}
+            <div class="square 
+              {{#if (eq score 2)}}green{{else if (eq score 1)}}yellow
+              {{else if (eq score 0)}}red{{else if (eq score 'f')}}gray{{else}}empty{{/if}}">
+            </div>
+          {{/each}}
+        </div>
+
+        {{#if ../rangeIs30}}
+          <canvas class="sparkline" data-labels="{{scoreTrendLabels}}" data-values="{{scoreTrendValues}}"></canvas>
+        {{/if}}
+
+      </div>
+    {{/each}}
+  </div>
+
+  <!-- Chart.js Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     const ctx = document.getElementById('analyticsChart').getContext('2d');
-
     new Chart(ctx, {
       type: 'bar',
       data: {
@@ -44,7 +94,36 @@
         }
       }
     });
+
+    // 🎯 Optional sparkline charts
+    document.querySelectorAll('.sparkline').forEach(canvas => {
+      const ctx = canvas.getContext('2d');
+      const labels = JSON.parse(canvas.dataset.labels);
+      const values = JSON.parse(canvas.dataset.values);
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Trend',
+            data: values,
+            fill: false,
+            borderColor: 'rgba(255, 99, 132, 1)',
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { display: false },
+            x: { display: false }
+          }
+        }
+      });
+    });
   </script>
+
 {{else}}
   <p style="margin-top: 20px;">📭 No log data found. Start tracking your habits!</p>
 {{/if}}

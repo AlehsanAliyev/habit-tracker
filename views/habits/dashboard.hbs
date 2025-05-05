@@ -1,61 +1,57 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Your Habit Dashboard</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      max-width: 800px;
-      margin: 30px auto;
-    }
-    .habit {
-      border-bottom: 1px solid #ccc;
-      padding: 10px 0;
-    }
-    .habit-title {
-      font-weight: bold;
-    }
-    .actions a {
-      margin-right: 10px;
-    }
-    .dashboard-buttons {
-      margin-top: 30px;
-    }
-    .dashboard-buttons a {
-      margin-right: 15px;
-      padding: 6px 12px;
-      background-color: #f0f0f0;
-      border: 1px solid #ccc;
-      text-decoration: none;
-      border-radius: 4px;
-    }
-  </style>
-</head>
-<body>
+<!-- Flash Messages -->
+{{#if success}}
+  <div class="flash success">{{success}}</div>
+{{/if}}
 
-  <h1>Welcome, {{user.name}} 👋</h1>
+{{#if error}}
+  <div class="flash error">{{error}}</div>
+{{/if}}
 
-  <h2>Your Habits</h2>
+<!-- Welcome -->
+<h1 style="margin-left: 2rem; margin-bottom: 2rem; font-size: 2.5rem;">
+  👋 Welcome, {{session.user.username}}
+</h1>
 
-  <div id="habitList" data-habits='{{json habits}}'>
+{{#if habits.length}}
+  <div class="habit-list">
     {{#each habits}}
-      <div class="habit">
-        <div class="habit-title">📘 {{this.title}} <em>({{this.frequency}})</em></div>
-        🔥 <strong>Streak:</strong> {{this.streak}} days
-        <div class="actions">
-          <a href="/habits/edit/{{this._id}}">Edit</a>
-          <a href="/habits/delete/{{this._id}}">Delete</a>
-          <a href="/logs/add/{{this._id}}">Log Today</a>
+      <div class="habit-card">
+        <h2>{{title}}</h2>
+
+        <p>📅 <strong>Frequency:</strong> {{frequency}}</p>
+
+        {{#ifEquals frequency "daily"}}
+          <p>🔥 <strong>Streak:</strong> {{streak}} day{{#if (gt streak 1)}}s{{/if}}</p>
+        {{/ifEquals}}
+
+        {{#ifEquals frequency "weekly"}}
+          <p>📆 Weekly Progress: {{weeklyProgress}} / {{weeklyTarget}}</p>
+        {{/ifEquals}}
+
+        <!-- Mini Heatmap -->
+        <div class="mini-grid">
+          {{#each last7Days}}
+            <div class="square 
+              {{#if (eq score 2)}}green{{else if (eq score 1)}}yellow
+              {{else if (eq score 0)}}red{{else if (eq score 'f')}}gray{{else}}empty{{/if}}">
+            </div>
+          {{/each}}
+        </div>
+
+        <!-- Habit Actions -->
+        <div class="habit-actions">
+          <a href="/logs/add/{{_id}}" class="btn btn-log">✔️ Log Today</a>
+          <a href="/habits/edit/{{_id}}" class="btn btn-edit">✏️ Edit</a>
+          <a href="/habits/delete/{{_id}}" class="btn btn-delete" onclick="return confirm('Delete this habit?')">🗑️ Delete</a>
         </div>
       </div>
     {{/each}}
   </div>
+{{else}}
+  <p style="margin-left: 2rem;">You haven’t added any habits yet.</p>
+{{/if}}
 
-  <div class="dashboard-buttons">
-    <a href="/habits/add">➕ Add New Habit</a>
-    <a href="/analytics">📊 View Analytics</a>
-    <a href="/logout">🚪 Logout</a>
-  </div>
-
-</body>
-</html>
+<!-- Add Button -->
+<div class="bottom-actions">
+  <a href="/habits/add" class="btn btn-add">➕ Add New Habit</a>
+</div>

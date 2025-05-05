@@ -1,12 +1,95 @@
-<h2>Suggested Habits</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Suggested Habits</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f9;
+      padding: 2rem;
+      margin: 0;
+    }
 
-<a href="/admin"><button>← Back to Admin Panel</button></a>
-<a href="/admin/suggested/new"><button>Add New Suggestion</button></a>
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
 
-<ul>
-  {{#each suggestions}}
-    <li>
-      <strong>{{title}}</strong> ({{frequency}})
-    </li>
-  {{/each}}
-</ul>
+    h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #333;
+    }
+
+    .actions a button {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 0.5rem;
+    }
+
+    .actions a button:hover {
+      background-color: #45a049;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #fff;
+      margin-bottom: 1rem;
+      padding: 1rem 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .habit-title {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .habit-frequency {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h2>📌 Suggested Habits</h2>
+    <div class="actions">
+      <a href="/admin"><button>← Admin Panel</button></a>
+      <a href="/admin/suggested/new"><button>➕ Add Suggestion</button></a>
+    </div>
+  </div>
+
+  {{#if suggestions.length}}
+    <ul>
+      {{#each suggestions}}
+        <li>
+          <span class="habit-title">{{title}}</span>
+          <span class="habit-frequency">({{frequency}})</span>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p>No suggested habits available yet.</p>
+  {{/if}}
+
+</body>
+</html>

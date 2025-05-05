@@ -1,13 +1,90 @@
-<h2>System Analytics</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>System Analytics</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f7fa;
+      padding: 2rem;
+      margin: 0;
+    }
 
-<p><strong>Total Users:</strong> {{totalUsers}}</p>
-<p><strong>Total Logs:</strong> {{totalLogs}}</p>
+    h2 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
 
-<h3>Top 5 Most Active Users</h3>
-<ul>
-  {{#each topUsers}}
-    <li>
-      <strong>{{username}}</strong> (ID: {{id}}) — Logs: {{count}}
-    </li>
-  {{/each}}
-</ul>
+    p {
+      font-size: 1.1rem;
+      margin: 0.5rem 0;
+    }
+
+    .stats {
+      background: #fff;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+      max-width: 500px;
+      margin-bottom: 2rem;
+    }
+
+    h3 {
+      font-size: 1.4rem;
+      margin-top: 2rem;
+      color: #444;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 1rem;
+      max-width: 500px;
+    }
+
+    li {
+      background: #fff;
+      padding: 0.9rem 1.2rem;
+      margin-bottom: 0.7rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .username {
+      font-weight: 600;
+      color: #222;
+    }
+
+    .log-count {
+      font-size: 0.95rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📊 System Analytics</h2>
+
+  <div class="stats">
+    <p><strong>Total Users:</strong> {{totalUsers}}</p>
+    <p><strong>Total Logs:</strong> {{totalLogs}}</p>
+  </div>
+
+  <h3>🏆 Top 5 Most Active Users</h3>
+  <ul>
+    {{#each topUsers}}
+      <li>
+        <span class="username">{{username}} <small>(ID: {{id}})</small></span>
+        <span class="log-count">Logs: {{count}}</span>
+      </li>
+    {{/each}}
+  </ul>
+
+</body>
+</html>

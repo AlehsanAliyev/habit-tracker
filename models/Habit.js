@@ -10,6 +10,10 @@ const habitSchema = new mongoose.Schema({
     enum: ['daily', 'weekly', 'monthly'],
     default: 'daily'
   },
+  weeklyTarget: {
+    type: Number,
+    default: null // You can change this to a number like 5 if you want default targets
+  },
   createdAt: {
     type: Date,
     default: Date.now

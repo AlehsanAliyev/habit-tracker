@@ -1,0 +1,17 @@
+<h2>🌱 Suggested Habits</h2>
+<p>Pick one to start building your habit!</p>
+
+<ul>
+  {{#each suggestions}}
+    <li style="margin-bottom: 1rem;">
+      <strong>{{title}}</strong> ({{frequency}})
+      <form action="/habits/add-from-suggestion" method="POST" style="display: inline;">
+        <input type="hidden" name="title" value="{{title}}" />
+        <input type="hidden" name="frequency" value="{{frequency}}" />
+        <button type="submit">➕ Add</button>
+      </form>
+    </li>
+  {{/each}}
+</ul>
+
+<a href="/habits"><button>← Back to Dashboard</button></a>

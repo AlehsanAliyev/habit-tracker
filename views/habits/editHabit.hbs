@@ -10,6 +10,9 @@
     <option value="weekly" {{#ifEquals habit.frequency "weekly"}}selected{{/ifEquals}}>Weekly</option>
     <option value="monthly" {{#ifEquals habit.frequency "monthly"}}selected{{/ifEquals}}>Monthly</option>
   </select>
+  <label for="weeklyTarget">Weekly Target:</label>
+  <input type="number" name="weeklyTarget" min="1" max="7" value="{{habit.weeklyTarget}}" />
+
 
   <button type="submit">Update Habit</button>
 </form>
