@@ -1,12 +1,23 @@
 # Node modules & system
 node_modules/
+
+# Environment
 .env
+.env.*.local
+!.env.example
+
+# OS junk
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Logs
 logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # IDE/editor
 .vscode/
@@ -17,6 +28,14 @@ logs/
 *.pid
 *.cache
 *.bak
+*.swp
+
+# Build & coverage (if present)
+dist/
+build/
+coverage/
+.nyc_output/
+.tmp/
 
 # Public uploads or media (optional)
 public/uploads/
@@ -24,10 +43,7 @@ public/uploads/
 # View engine partials cache (if exists)
 views/partials/__compiled/
 
-# Optional: skip test AI folder
+# Optional: skip experimental AI folders
 ai/
 voice/
 transcribe_tmp/
-
-# OS
-*.swp

@@ -12,7 +12,7 @@
   <header>
     {{#if session.user}}
       <nav style="margin-bottom: 20px;">
-        Welcome, {{session.user.username}}
+        {{!-- Welcome, {{session.user.username}} --}}
         {{#ifEquals session.user.role 'admin'}}
           🛡️ (Admin) |
           <a href="/admin">Admin Panel</a> |
@@ -23,6 +23,9 @@
         <a href="/habits">Habits</a> |
         <a href="/habits/analytics">My Analytics</a> |
         <a href="/habits/suggested">Suggested Habits</a> |
+        <a href="/journal">Journal</a>
+        <a href="/tasks">Tasks</a> |
+
 
         <a href="/logout">Logout</a>
       </nav>

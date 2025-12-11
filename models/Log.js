@@ -46,7 +46,7 @@ const logSchema = new mongoose.Schema({
     required: true
   },
   score: {
-    type: mongoose.Schema.Types.Mixed, // number or 'f' for off
+    type: mongoose.Schema.Types.Mixed,
     required: true
   }
 });

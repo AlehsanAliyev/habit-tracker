@@ -1,101 +1,76 @@
-# Habit Tracker App
+﻿# Habit Tracker App
 
-A simple, goal-oriented habit tracking application where users can create, manage, and track their daily and weekly habits. The app provides insightful analytics and includes basic user authentication, an admin panel, and suggested habit templates to help users stay motivated.
+Goal-oriented habit tracker with dashboards, analytics, journaling, and a lightweight daily task list. Users track habits by frequency, log scores, review 7/30 day trends and admins curate suggested habits and monitor activity.
 
 ---
 
 ## Features
 
-### User Functionality
-- Register/Login with session-based authentication
-- Create/Edit/Delete Habits with daily or weekly frequency
-- Log Habit Status (completed, partial, missed, or day off)
-- Weekly Progress View with color-coded mini calendar
-- Analytics Page showing:
-  - Completion percentages
-  - Weekly progress heatmaps
-  - Streak tracking and badges
-  - Average scores and trends
+### User
+- Session-based auth (login/register/logout)
+- Habits: create/edit/delete with daily/weekly/monthly frequency and optional weekly target, last-7-day heatmap
+- Logging: statuses completed/partial/off/missed mapped to scores 2/1/f/0; duplicate daily logs blocked
+- Analytics: completion %, average score, streaks/badges, best/worst callouts, sort by completion/average/streak, 7 or 30 day range, heatmaps and sparkline trends (Chart.js)
+- Journaling: morning/evening notes per day; list/add/edit/delete
+- Today's tasks: simple to-do list with add/toggle/delete for the current day
 
-### Admin Functionality
-- View all registered users
-- See each user’s habits
-- Add suggested habits for users to explore and add
-- View top 5 active users and basic system stats
+### Admin
+- User list with per-user habit view
+- Suggested habits: create/manage templates users can add
+- Admin analytics: total users/logs and top 5 active users
 
 ---
 
-## Technologies Used
-
-- Node.js / Express for backend
-- MongoDB / Mongoose for database
-- Express-Session for session handling
-- Handlebars (HBS) for view rendering
-- Custom CSS for styling and layout
-- Chart.js for analytics charts
-- connect-flash for success/error messaging
-
----
-
-## Security Measures
-
-- Sessions and cookie handling for auth state
-- Password handling (with optional hashing via bcrypt)
-- Validation and duplication checks on input
-- Environment variables used for secrets and DB config
-- Mongoose ORM protects against injection attacks
+## Tech Stack
+- Node.js + Express 5, Handlebars templates, custom CSS
+- MongoDB with Mongoose models for users, habits, logs, journals, tasks, suggested habits
+- express-session + connect-flash for auth state/messages; bcryptjs for hashing; dotenv for config
+- Chart.js for analytics visuals
 
 ---
 
 ## Getting Started
-
-### Prerequisites
-- Node.js and npm installed
-- MongoDB running locally or via MongoDB Atlas
-
-### Setup Instructions
-
-```bash
-git clone https://github.com/yourusername/habit-tracker.git
-cd habit-tracker
-npm install
-```
-
-Create a `.env` file with:
-
-```
-SESSION_SECRET=yourSecretKey
-MONGO_URI=yourMongoDBConnectionString
-```
-
-Then run the app:
-
-```bash
-npm start
-```
-
-Visit: [http://localhost:3000](http://localhost:3000)
+1. Prerequisites: Node.js, npm, MongoDB (local or Atlas)
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Add a `.env` in the project root:
+   ```
+   SESSION_SECRET=yourSecretKey
+   MONGO_URI=yourMongoDBConnectionString
+   PORT=3000
+   ```
+4. Run the app:
+   ```bash
+   node app.js
+   ```
+   Visit http://localhost:${PORT || 3000}
 
 ---
 
-## Folder Structure
-
-```
-/models        → Mongoose schemas
-/routes        → Express route controllers
-/views         → Handlebars templates
-/public        → Static assets and styles
-/config        → Database connection
-/utils         → Streak and scoring helpers
-```
+## Navigation Guide
+- `/` home landing
+- Auth: `/login`, `/register`, `/logout`
+- Habits dashboard: `/habits` (quick log buttons, last-7 heatmaps)
+- Logging: `/logs` history; `/logs/add/:habitId` to log today
+- Analytics: `/habits/analytics?range=7|30&sort=completion|average|streak`
+- Suggestions: `/habits/suggested`, `/habits/add-from-suggestion`
+- Journal: `/journal`, `/journal/add`, `/journal/edit/:id`
+- Tasks: `/tasks` today's tasks add/toggle/delete
+- Admin: `/admin` user list + per-user habits; `/admin/suggested`; `/admin/analytics`
 
 ---
 
-## Notes
+## Data Model Snapshot
+- Habit: title, frequency (daily/weekly/monthly), weeklyTarget, user
+- Log: habit, user, date, status (completed/partial/off/missed), score (2/1/0/'f')
+- Journal: user, date, morningNote, eveningNote (timestamps enabled)
+- Task: user, title, isCompleted, date (midnight for daily grouping)
+- SuggestedHabit: title, frequency, createdBy
+- User: username, email, password, role (user|admin)
 
-- Suggested habits can be added by the admin and viewed by users.
-- Logs support different scoring (2 = completed, 1 = partial, 0 = missed, 'f' = day off).
-- Streaks apply to daily habits; weekly habits show progress against a weekly goal.
-- All analytics and visual indicators are designed to give users feedback and encourage consistency.
+---
 
-
+## Utilities
+- `migrateLogs.js`: backfills `score` for legacy log docs using `MONGO_URI` or defaults to `mongodb://localhost:27017/HabitTracker`.

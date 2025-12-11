@@ -1,0 +1,18 @@
+<h2>📋 Today’s Tasks</h2>
+
+<form action="/tasks/add" method="POST">
+  <input type="text" name="title" placeholder="New Task" required>
+  <button type="submit">Add</button>
+</form>
+
+<ul>
+  {{#each tasks}}
+    <li>
+      <form action="/tasks/toggle/{{this._id}}" method="POST" style="display: inline;">
+        <button type="submit">{{#if this.isCompleted}}✅{{else}}⬜{{/if}}</button>
+      </form>
+      {{this.title}}
+      <a href="/tasks/delete/{{this._id}}" onclick="return confirm('Delete this task?')">🗑️</a>
+    </li>
+  {{/each}}
+</ul>

@@ -20,13 +20,13 @@
 
         <p>📅 <strong>Frequency:</strong> {{frequency}}</p>
 
-        {{#ifEquals frequency "daily"}}
+        {{!-- {{#ifEquals frequency "daily"}}
           <p>🔥 <strong>Streak:</strong> {{streak}} day{{#if (gt streak 1)}}s{{/if}}</p>
-        {{/ifEquals}}
+        {{/ifEquals}} --}}
 
-        {{#ifEquals frequency "weekly"}}
+        {{!-- {{#ifEquals frequency "weekly"}}
           <p>📆 Weekly Progress: {{weeklyProgress}} / {{weeklyTarget}}</p>
-        {{/ifEquals}}
+        {{/ifEquals}} --}}
 
         <!-- Mini Heatmap -->
         <div class="mini-grid">

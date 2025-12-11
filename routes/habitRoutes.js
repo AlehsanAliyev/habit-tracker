@@ -116,6 +116,7 @@ router.get('/analytics', ensureAuthenticated, async (req, res) => {
     });
 
     const stats = calculateHabitScore(allLogs);
+    
     if (!stats) continue;
 
     analytics.push({

@@ -1,0 +1,11 @@
+<h2>{{#if entry}}Edit{{else}}Add{{/if}} Journal Entry</h2>
+
+<form method="POST" action="{{#if entry}}/journal/edit/{{entry._id}}{{else}}/journal/add{{/if}}">
+  <label>🌅 Morning Note</label><br>
+  <textarea name="morningNote" rows="4">{{entry.morningNote}}</textarea><br><br>
+
+  <label>🌇 Evening Note</label><br>
+  <textarea name="eveningNote" rows="4">{{entry.eveningNote}}</textarea><br><br>
+
+  <button type="submit">Save</button>
+</form>

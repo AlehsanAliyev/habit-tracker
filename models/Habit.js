@@ -12,7 +12,7 @@ const habitSchema = new mongoose.Schema({
   },
   weeklyTarget: {
     type: Number,
-    default: null // You can change this to a number like 5 if you want default targets
+    default: null 
   },
   createdAt: {
     type: Date,

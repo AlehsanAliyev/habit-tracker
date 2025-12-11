@@ -1,4 +1,4 @@
-// Protect routes from unauthenticated users
+// Protect routes
 exports.ensureAuthenticated = (req, res, next) => {
     if (req.session && req.session.user) {
       return next();
@@ -6,7 +6,7 @@ exports.ensureAuthenticated = (req, res, next) => {
     res.redirect('/login');
   };
   
-  // Only allow admin users
+  // Only allow admin
 exports.ensureAdmin = (req, res, next) => {
     if (req.session?.user?.role === 'admin') {
         return next();
