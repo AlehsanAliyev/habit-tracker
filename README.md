@@ -1,76 +1,110 @@
 ﻿# Habit Tracker App
+A personal habit system focused on honest progress: track, reflect, and learn from real-world consistency.
 
-Goal-oriented habit tracker with dashboards, analytics, journaling, and a lightweight daily task list. Users track habits by frequency, log scores, review 7/30 day trends and admins curate suggested habits and monitor activity.
+## Why this project exists
+Most habit trackers reduce behavior to a binary done/not-done streak. That works for simple routines, but it ignores reality: some days are partial wins, some are planned breaks, and most need context to make sense. Habit Tracker App exists to capture that nuance. It blends lightweight tracking with reflection and analytics so progress is measured as a signal over time, not just a streak count.
 
----
+## Core concept / mental model
+Habit Tracker App treats each habit as a rolling signal:
+- Daily logs capture **quality** (completed, partial, missed, off).
+- Heatmaps and trends visualize **consistency**.
+- Morning and evening journaling provide **context**.
+- Daily tasks capture **short-term focus**.
+
+The system is designed around a simple loop: log → reflect → review → adjust.
+
+## Screenshots
+Screenshots will be added to `/screenshots`.
+
+![Dashboard with habit cards and heatmaps](screenshots/dashboard.png)
+*Dashboard: habit cards with heatmaps and quick actions.*
+
+![Analytics overview with trends](screenshots/analytics1.png)
+![Analytics overview with trends](screenshots/analytics2.png)
+*Analytics: completion percentages, streaks, and trend graphs.*
+
+![Journal entries](screenshots/journal.png)
+*Journal: morning and evening reflection blocks.*
+
+![Tasks list](screenshots/tasks.png)
+*Tasks: a daily list with simple completion toggles.*
 
 ## Features
 
-### User
-- Session-based auth (login/register/logout)
-- Habits: create/edit/delete with daily/weekly/monthly frequency and optional weekly target, last-7-day heatmap
-- Logging: statuses completed/partial/off/missed mapped to scores 2/1/f/0; duplicate daily logs blocked
-- Analytics: completion %, average score, streaks/badges, best/worst callouts, sort by completion/average/streak, 7 or 30 day range, heatmaps and sparkline trends (Chart.js)
-- Journaling: morning/evening notes per day; list/add/edit/delete
-- Today's tasks: simple to-do list with add/toggle/delete for the current day
+### Habit tracking & scoring
+Habits are logged as **completed**, **partial**, **missed**, or **off**. This makes progress more truthful: partial effort still counts, and planned breaks do not distort the data. The scoring model feeds into streaks, averages, and analytics.
 
-### Admin
-- User list with per-user habit view
-- Suggested habits: create/manage templates users can add
-- Admin analytics: total users/logs and top 5 active users
+### Analytics & trends
+Analytics highlight completion rates, average scores, streaks, and trendlines over 7- or 30-day ranges. The emphasis is on direction and consistency, not just raw totals.
+
+### Journaling (morning vs evening)
+Journaling is split into morning and evening notes to capture intent and reflection. This keeps the app grounded in daily context and makes patterns easier to interpret.
+
+### Daily tasks
+A lightweight daily to-do list sits alongside habits. It is intentionally simple and resets each day to keep focus tight.
+
+### Admin capabilities
+Admin views include user management, suggested habit templates, and system analytics (total users/logs, most active users). This is a portfolio feature to demonstrate role-based access and oversight.
+
+## Technical architecture & design decisions
+Habit Tracker App is a server-rendered web app designed for clarity and control over the entire stack.
+
+- **Node.js + Express** for explicit routing and middleware flow.
+- **Handlebars** for predictable, maintainable templates without a heavy front-end build step.
+- **MongoDB + Mongoose** to model structured data (habits/logs) while keeping notes flexible.
+- **Chart.js** for lightweight, expressive analytics visualizations.
+
+The goal is not novelty, but a clean, understandable system where data modeling, UX, and analytics are all owned and aligned.
+
+## Folder structure (high-level)
+```
+/controllers     Auth and request handling
+/models          Mongoose schemas
+/routes          Express route definitions
+/views           Handlebars templates
+/public          CSS, JS, static assets
+/utils           Scoring and streak helpers
+/config          Database connection
+```
+
+## UX & design philosophy
+The UI is intentionally dark-first with clear hierarchy:
+- Cards and panels make content scannable.
+- Heatmaps provide fast visual feedback.
+- Consistent spacing and typography reduce noise.
+- Micro-interactions and hover states make the interface feel responsive without distraction.
+
+The design aims to feel like a calm control panel rather than a gamified tracker.
+
+## Getting started
+
+### Prerequisites
+- Node.js
+- MongoDB (local or Atlas)
+
+### Environment variables
+Create a `.env` file at the project root:
+```
+SESSION_SECRET=yourSecretKey
+MONGO_URI=yourMongoDBConnectionString
+PORT=3000
+```
+
+### Run the project
+```bash
+npm install
+node app.js
+```
+
+Visit `http://localhost:3000`.
+
+## Future improvements & ideas
+- More advanced insights (day-of-week patterns, month-over-month trends)
+- Habit dependencies and sequences
+- Weekly digest summaries
+- Data export/import
+- Optional light theme and custom accent palettes
 
 ---
 
-## Tech Stack
-- Node.js + Express 5, Handlebars templates, custom CSS
-- MongoDB with Mongoose models for users, habits, logs, journals, tasks, suggested habits
-- express-session + connect-flash for auth state/messages; bcryptjs for hashing; dotenv for config
-- Chart.js for analytics visuals
-
----
-
-## Getting Started
-1. Prerequisites: Node.js, npm, MongoDB (local or Atlas)
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Add a `.env` in the project root:
-   ```
-   SESSION_SECRET=yourSecretKey
-   MONGO_URI=yourMongoDBConnectionString
-   PORT=3000
-   ```
-4. Run the app:
-   ```bash
-   node app.js
-   ```
-   Visit http://localhost:${PORT || 3000}
-
----
-
-## Navigation Guide
-- `/` home landing
-- Auth: `/login`, `/register`, `/logout`
-- Habits dashboard: `/habits` (quick log buttons, last-7 heatmaps)
-- Logging: `/logs` history; `/logs/add/:habitId` to log today
-- Analytics: `/habits/analytics?range=7|30&sort=completion|average|streak`
-- Suggestions: `/habits/suggested`, `/habits/add-from-suggestion`
-- Journal: `/journal`, `/journal/add`, `/journal/edit/:id`
-- Tasks: `/tasks` today's tasks add/toggle/delete
-- Admin: `/admin` user list + per-user habits; `/admin/suggested`; `/admin/analytics`
-
----
-
-## Data Model Snapshot
-- Habit: title, frequency (daily/weekly/monthly), weeklyTarget, user
-- Log: habit, user, date, status (completed/partial/off/missed), score (2/1/0/'f')
-- Journal: user, date, morningNote, eveningNote (timestamps enabled)
-- Task: user, title, isCompleted, date (midnight for daily grouping)
-- SuggestedHabit: title, frequency, createdBy
-- User: username, email, password, role (user|admin)
-
----
-
-## Utilities
-- `migrateLogs.js`: backfills `score` for legacy log docs using `MONGO_URI` or defaults to `mongodb://localhost:27017/HabitTracker`.
+Habit Tracker App is a personal portfolio project intended to demonstrate product thinking system design, and end-to-end implementation. Feedback is welcome.

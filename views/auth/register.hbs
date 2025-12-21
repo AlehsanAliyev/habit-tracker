@@ -1,104 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Register</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  <style>
-    body {
-      background: #f1f5f9;
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
+﻿<div class="page-head">
+  <div>
+    <h1>Register</h1>
+    <p class="page-subtitle">Create your account and start tracking today.</p>
+  </div>
+</div>
 
-    .auth-container {
-      background: #fff;
-      padding: 2.5rem 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.08);
-      width: 100%;
-      max-width: 400px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      font-size: 1.8rem;
-      color: #333;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.4rem;
-      font-weight: 600;
-      color: #333;
-    }
-
-    input {
-      width: 100%;
-      padding: 0.7rem;
-      margin-bottom: 1.2rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-sizing: border-box;
-    }
-
-    button {
-      width: 100%;
-      background-color: #4CAF50;
-      color: white;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-
-    button:hover {
-      background-color: #43a047;
-    }
-
-    p {
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 0.95rem;
-    }
-
-    a {
-      color: #007BFF;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-  <div class="auth-container">
-    <h2><span style="user-select: none;">📝</span> Register</h2>
-
+<div class="auth-wrap">
+  <div class="card auth-card">
     <form action="/register" method="POST">
-      <label for="username">Username:</label>
-      <input type="text" name="username" required />
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="username">Username</label>
+          <input class="input" type="text" id="username" name="username" required>
+        </div>
 
-      <label for="email">Email:</label>
-      <input type="email" name="email" required />
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input class="input" type="email" id="email" name="email" required>
+        </div>
 
-      <label for="password">Password:</label>
-      <input type="password" name="password" required />
+        <div class="form-field">
+          <label for="password">Password</label>
+          <input class="input" type="password" id="password" name="password" required>
+        </div>
+      </div>
 
-      <button type="submit">Register</button>
+      <div class="form-actions">
+        <button class="btn primary" type="submit">Create account</button>
+      </div>
     </form>
 
-    <p>
-      Already have an account? <a href="/login">Login here</a>
+    <p class="helper-text">
+      Already registered? <a href="/login">Login</a>
     </p>
   </div>
-</body>
-</html>
+</div>

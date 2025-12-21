@@ -1,18 +1,34 @@
-<h2>📋 Today’s Tasks</h2>
+﻿<div class="page-head">
+  <div>
+    <h1>Today's Tasks</h1>
+    <p class="page-subtitle">Quick focus list for the day.</p>
+  </div>
+</div>
 
-<form action="/tasks/add" method="POST">
-  <input type="text" name="title" placeholder="New Task" required>
-  <button type="submit">Add</button>
-</form>
+<div class="card">
+  <form action="/tasks/add" method="POST" class="form-row">
+    <div class="form-field grow">
+      <label for="title">New Task</label>
+      <input class="input" type="text" id="title" name="title" placeholder="Add a new task" required>
+    </div>
+    <button type="submit" class="btn primary">Add Task</button>
+  </form>
 
-<ul>
-  {{#each tasks}}
-    <li>
-      <form action="/tasks/toggle/{{this._id}}" method="POST" style="display: inline;">
-        <button type="submit">{{#if this.isCompleted}}✅{{else}}⬜{{/if}}</button>
-      </form>
-      {{this.title}}
-      <a href="/tasks/delete/{{this._id}}" onclick="return confirm('Delete this task?')">🗑️</a>
-    </li>
-  {{/each}}
-</ul>
+  <ul class="list spaced">
+    {{#each tasks}}
+      <li class="row">
+        <div class="row-left">
+          <form action="/tasks/toggle/{{this._id}}" method="POST">
+            <button type="submit" class="btn ghost small" aria-label="Toggle completion">
+              {{#if this.isCompleted}}Done{{else}}Mark done{{/if}}
+            </button>
+          </form>
+          <span class="task-title {{#if this.isCompleted}}is-done{{/if}}">{{this.title}}</span>
+        </div>
+        <div class="row-right">
+          <a href="/tasks/delete/{{this._id}}" class="btn danger small" onclick="return confirm('Delete this task?')">Delete</a>
+        </div>
+      </li>
+    {{/each}}
+  </ul>
+</div>

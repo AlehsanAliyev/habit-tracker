@@ -1,0 +1,32 @@
+﻿<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/">Habit Tracker</a>
+
+    <button class="nav-toggle" type="button" data-nav-toggle aria-label="Toggle navigation">
+      Menu
+    </button>
+
+    <div class="nav-menu" data-nav-menu>
+      {{#if session.user}}
+        <div class="nav-links">
+          <a class="nav-link" href="/habits">Habits</a>
+          <a class="nav-link" href="/habits/analytics">Analytics</a>
+          <a class="nav-link" href="/journal">Journal</a>
+          <a class="nav-link" href="/tasks">Tasks</a>
+          <a class="nav-link" href="/habits/suggested">Suggested</a>
+          {{#ifEquals session.user.role 'admin'}}
+            <a class="nav-link" href="/admin">Admin</a>
+          {{/ifEquals}}
+        </div>
+        <div class="nav-actions">
+          <a class="btn ghost small" href="/logout">Logout</a>
+        </div>
+      {{else}}
+        <div class="nav-links">
+          <a class="nav-link" href="/login">Login</a>
+          <a class="btn primary small" href="/register">Create account</a>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</nav>

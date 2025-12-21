@@ -1,17 +1,35 @@
-<h2>🌱 Suggested Habits</h2>
-<p>Pick one to start building your habit!</p>
+﻿<div class="page-head">
+  <div>
+    <h1>Suggested Habits</h1>
+    <p class="page-subtitle">Pick one to add quickly.</p>
+  </div>
+  <div class="page-actions">
+    <a class="btn ghost" href="/habits">Back to Dashboard</a>
+  </div>
+</div>
 
-<ul>
-  {{#each suggestions}}
-    <li style="margin-bottom: 1rem;">
-      <strong>{{title}}</strong> ({{frequency}})
-      <form action="/habits/add-from-suggestion" method="POST" style="display: inline;">
-        <input type="hidden" name="title" value="{{title}}" />
-        <input type="hidden" name="frequency" value="{{frequency}}" />
-        <button type="submit">➕ Add</button>
-      </form>
-    </li>
-  {{/each}}
-</ul>
-
-<a href="/habits"><button>← Back to Dashboard</button></a>
+{{#if suggestions.length}}
+  <div class="card">
+    <ul class="list">
+      {{#each suggestions}}
+        <li class="row">
+          <div class="row-left">
+            <strong>{{title}}</strong>
+            <span class="badge muted">{{frequency}}</span>
+          </div>
+          <div class="row-right">
+            <form action="/habits/add-from-suggestion" method="POST">
+              <input type="hidden" name="title" value="{{title}}">
+              <input type="hidden" name="frequency" value="{{frequency}}">
+              <button type="submit" class="btn primary small">Add</button>
+            </form>
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+{{else}}
+  <div class="card">
+    <p class="card-meta">No suggestions yet.</p>
+  </div>
+{{/if}}

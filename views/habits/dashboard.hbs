@@ -1,57 +1,46 @@
-<!-- Flash Messages -->
-{{#if success}}
-  <div class="flash success">{{success}}</div>
-{{/if}}
-
-{{#if error}}
-  <div class="flash error">{{error}}</div>
-{{/if}}
-
-<!-- Welcome -->
-<h1 style="margin-left: 2rem; margin-bottom: 2rem; font-size: 2.5rem;">
-  👋 Welcome, {{session.user.username}}
-</h1>
+﻿<div class="page-head">
+  <div>
+    <h1>Dashboard</h1>
+    <p class="page-subtitle">Welcome, {{session.user.username}}. Keep the streak alive.</p>
+  </div>
+  <div class="page-actions">
+    <a class="btn primary" href="/habits/add">Add Habit</a>
+  </div>
+</div>
 
 {{#if habits.length}}
-  <div class="habit-list">
+  <div class="card-grid">
     {{#each habits}}
-      <div class="habit-card">
-        <h2>{{title}}</h2>
+      <div class="card habit-card">
+        <div class="habit-head">
+          <h3 class="habit-title">{{title}}</h3>
+          <span class="pill">{{frequency}}</span>
+        </div>
 
-        <p>📅 <strong>Frequency:</strong> {{frequency}}</p>
+        <div class="habit-meta">
+          {{#if weeklyTarget}}
+            <div class="meta-line"><strong>Weekly target:</strong> {{weeklyTarget}}</div>
+          {{/if}}
+        </div>
 
-        {{!-- {{#ifEquals frequency "daily"}}
-          <p>🔥 <strong>Streak:</strong> {{streak}} day{{#if (gt streak 1)}}s{{/if}}</p>
-        {{/ifEquals}} --}}
+        <div class="habit-spacer"></div>
 
-        {{!-- {{#ifEquals frequency "weekly"}}
-          <p>📆 Weekly Progress: {{weeklyProgress}} / {{weeklyTarget}}</p>
-        {{/ifEquals}} --}}
-
-        <!-- Mini Heatmap -->
-        <div class="mini-grid">
+        <div class="heatmap" aria-label="Last seven days">
           {{#each last7Days}}
-            <div class="square 
-              {{#if (eq score 2)}}green{{else if (eq score 1)}}yellow
-              {{else if (eq score 0)}}red{{else if (eq score 'f')}}gray{{else}}empty{{/if}}">
-            </div>
+            <span class="heatmap-square {{#if (eq score 2)}}is-good{{else if (eq score 1)}}is-warn{{else if (eq score 0)}}is-bad{{else if (eq score 'f')}}is-muted{{else}}is-empty{{/if}}"></span>
           {{/each}}
         </div>
 
-        <!-- Habit Actions -->
         <div class="habit-actions">
-          <a href="/logs/add/{{_id}}" class="btn btn-log">✔️ Log Today</a>
-          <a href="/habits/edit/{{_id}}" class="btn btn-edit">✏️ Edit</a>
-          <a href="/habits/delete/{{_id}}" class="btn btn-delete" onclick="return confirm('Delete this habit?')">🗑️ Delete</a>
+          <a href="/logs/add/{{_id}}" class="btn primary small">Log today</a>
+          <a href="/habits/edit/{{_id}}" class="btn ghost small">Edit</a>
+          <a href="/habits/delete/{{_id}}" class="btn danger small" onclick="return confirm('Delete this habit?')">Delete</a>
         </div>
       </div>
     {{/each}}
   </div>
 {{else}}
-  <p style="margin-left: 2rem;">You haven’t added any habits yet.</p>
+  <div class="card">
+    <p class="card-meta">You have not added any habits yet.</p>
+  </div>
 {{/if}}
-
-<!-- Add Button -->
-<div class="bottom-actions">
-  <a href="/habits/add" class="btn btn-add">➕ Add New Habit</a>
-</div>

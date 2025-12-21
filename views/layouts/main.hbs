@@ -1,41 +1,24 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{title}}</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/app.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 <body>
-
-  <header>
-    {{#if session.user}}
-      <nav style="margin-bottom: 20px;">
-        {{!-- Welcome, {{session.user.username}} --}}
-        {{#ifEquals session.user.role 'admin'}}
-          🛡️ (Admin) |
-          <a href="/admin">Admin Panel</a> |
-          <a href="/admin/suggested">Suggested Habits</a> |
-          <a href="/admin/analytics">System Analytics</a> |
-        {{/ifEquals}}
-
-        <a href="/habits">Habits</a> |
-        <a href="/habits/analytics">My Analytics</a> |
-        <a href="/habits/suggested">Suggested Habits</a> |
-        <a href="/journal">Journal</a>
-        <a href="/tasks">Tasks</a> |
-
-
-        <a href="/logout">Logout</a>
-      </nav>
-    {{/if}}
-
+  <header class="navbar-wrap">
+    {{> navbar}}
   </header>
 
-  <main>
-    {{{body}}}
+  <main class="content">
+    <div class="container">
+      {{> flash}}
+      {{{body}}}
+    </div>
   </main>
 
+  <script src="/js/ui.js"></script>
 </body>
 </html>

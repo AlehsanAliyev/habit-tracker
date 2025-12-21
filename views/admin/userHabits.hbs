@@ -1,91 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>{{user.username}}'s Habits</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f6f9;
-      padding: 2rem;
-      margin: 0;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    h2 {
-      font-size: 1.8rem;
-      color: #333;
-      margin: 0;
-    }
-
-    .back-button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 0.6rem 1rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .back-button:hover {
-      background-color: #45a049;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      background: #fff;
-      padding: 1rem 1.2rem;
-      margin-bottom: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .habit-title {
-      font-weight: bold;
-      color: #333;
-    }
-
-    .habit-frequency {
-      font-size: 0.9rem;
-      font-style: italic;
-      color: #666;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="header">
-    <h2>🧑 {{user.username}}'s Habits</h2>
-    <a href="/admin"><button class="back-button">← Back to Admin Panel</button></a>
+﻿<div class="page-head">
+  <div>
+    <h1>{{user.username}}'s Habits</h1>
+    <p class="page-subtitle">Overview of tracked habits.</p>
   </div>
+  <div class="page-actions">
+    <a href="/admin" class="btn ghost">Back to Admin Panel</a>
+  </div>
+</div>
 
-  {{#if habits.length}}
-    <ul>
-      {{#each habits}}
-        <li>
-          <span class="habit-title">{{title}}</span>
-          <span class="habit-frequency">({{frequency}})</span>
-        </li>
-      {{/each}}
-    </ul>
-  {{else}}
-    <p>This user has no habits.</p>
-  {{/if}}
-
-</body>
-</html>
+{{#if habits.length}}
+  <div class="card-grid">
+    {{#each habits}}
+      <div class="card">
+        <div class="card-head">
+          <h3 class="card-title">{{title}}</h3>
+          <span class="badge muted">{{frequency}}</span>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+{{else}}
+  <div class="card">
+    <p class="card-meta">This user has no habits.</p>
+  </div>
+{{/if}}

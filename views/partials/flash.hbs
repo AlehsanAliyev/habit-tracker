@@ -1,0 +1,11 @@
+﻿{{#if success}}
+  {{#each success}}
+    <div class="flash success" role="status">{{this}}</div>
+  {{/each}}
+{{/if}}
+
+{{#if error}}
+  {{#each error}}
+    <div class="flash error" role="alert">{{this}}</div>
+  {{/each}}
+{{/if}}

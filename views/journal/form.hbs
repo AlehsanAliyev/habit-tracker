@@ -1,11 +1,29 @@
-<h2>{{#if entry}}Edit{{else}}Add{{/if}} Journal Entry</h2>
+﻿<div class="page-head">
+  <div>
+    <h1>{{#if entry}}Edit Journal Entry{{else}}New Journal Entry{{/if}}</h1>
+    <p class="page-subtitle">Capture morning and evening notes.</p>
+  </div>
+  <div class="page-actions">
+    <a href="/journal" class="btn ghost">Back</a>
+  </div>
+</div>
 
-<form method="POST" action="{{#if entry}}/journal/edit/{{entry._id}}{{else}}/journal/add{{/if}}">
-  <label>🌅 Morning Note</label><br>
-  <textarea name="morningNote" rows="4">{{entry.morningNote}}</textarea><br><br>
+<div class="card">
+  <form action="{{#if entry}}/journal/edit/{{entry._id}}{{else}}/journal/add{{/if}}" method="POST">
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="morningNote">Morning Note</label>
+        <textarea class="textarea" id="morningNote" name="morningNote" rows="4">{{entry.morningNote}}</textarea>
+      </div>
 
-  <label>🌇 Evening Note</label><br>
-  <textarea name="eveningNote" rows="4">{{entry.eveningNote}}</textarea><br><br>
+      <div class="form-field">
+        <label for="eveningNote">Evening Note</label>
+        <textarea class="textarea" id="eveningNote" name="eveningNote" rows="4">{{entry.eveningNote}}</textarea>
+      </div>
+    </div>
 
-  <button type="submit">Save</button>
-</form>
+    <div class="form-actions">
+      <button type="submit" class="btn primary">Save Entry</button>
+    </div>
+  </form>
+</div>

@@ -1,10 +1,29 @@
-<h2>Add Journal Entry</h2>
-<form method="POST" action="/journal/add">
-  <label>🌅 Morning Note</label><br>
-  <textarea name="morningNote" rows="4"></textarea><br><br>
+﻿<div class="page-head">
+  <div>
+    <h1>New Journal Entry</h1>
+    <p class="page-subtitle">Capture morning and evening notes.</p>
+  </div>
+  <div class="page-actions">
+    <a href="/journal" class="btn ghost">Back</a>
+  </div>
+</div>
 
-  <label>🌇 Evening Note</label><br>
-  <textarea name="eveningNote" rows="4"></textarea><br><br>
+<div class="card">
+  <form action="/journal/add" method="POST">
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="morningNote">Morning Note</label>
+        <textarea class="textarea" id="morningNote" name="morningNote" rows="4"></textarea>
+      </div>
 
-  <button type="submit">Save</button>
-</form>
+      <div class="form-field">
+        <label for="eveningNote">Evening Note</label>
+        <textarea class="textarea" id="eveningNote" name="eveningNote" rows="4"></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn primary">Save Entry</button>
+    </div>
+  </form>
+</div>

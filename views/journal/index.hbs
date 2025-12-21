@@ -1,17 +1,53 @@
-<h2>📝 My Journal</h2>
-
-<div class="bottom-actions">
-  <a href="/journal/add" class="btn btn-add">➕ Add New Entry</a>
+﻿<div class="page-head">
+  <div>
+    <h1>My Journal</h1>
+    <p class="page-subtitle">Morning and evening reflections.</p>
+  </div>
+  <div class="page-actions">
+    <a href="/journal/add" class="btn primary">New Entry</a>
+  </div>
 </div>
 
-{{#each entries}}
-  <div class="journal-entry {{#if @index}}{{#if (mod @index 2)}}right{{else}}left{{/if}}{{else}}left{{/if}}">
-    <p><strong>{{date}}</strong></p>
-    <p><em>🌅 Morning:</em> {{morningNote}}</p>
-    <p><em>🌇 Evening:</em> {{eveningNote}}</p>
-    <div class="habit-actions">
-      <a href="/journal/edit/{{_id}}" class="btn btn-edit">✏️ Edit</a>
-      <a href="/journal/delete/{{_id}}" class="btn btn-delete" onclick="return confirm('Delete this journal entry?')">🗑️ Delete</a>
-    </div>
+{{#if entries.length}}
+  <div class="card-grid">
+    {{#each entries}}
+      <div class="card">
+        <div class="card-head">
+          <h3 class="card-title" data-date="{{date}}">{{date}}</h3>
+        </div>
+        <div class="journal-notes">
+          <div class="note-block morning">
+            <div class="note-head">
+              <span class="note-badge">Morning</span>
+            </div>
+            {{#if morningNote}}
+              <p class="note-text">{{morningNote}}</p>
+            {{else}}
+              <p class="note-text is-placeholder">No morning note yet.</p>
+            {{/if}}
+          </div>
+
+          <div class="note-block evening">
+            <div class="note-head">
+              <span class="note-badge">Evening</span>
+            </div>
+            {{#if eveningNote}}
+              <p class="note-text">{{eveningNote}}</p>
+            {{else}}
+              <p class="note-text is-placeholder">No evening note yet.</p>
+            {{/if}}
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <a href="/journal/edit/{{_id}}" class="btn ghost small">Edit</a>
+          <a href="/journal/delete/{{_id}}" class="btn danger small" onclick="return confirm('Delete this journal entry?')">Delete</a>
+        </div>
+      </div>
+    {{/each}}
   </div>
-{{/each}}
+{{else}}
+  <div class="card">
+    <p class="card-meta">No journal entries yet.</p>
+  </div>
+{{/if}}
