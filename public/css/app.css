@@ -547,6 +547,8 @@ label {
   flex-wrap: wrap;
   gap: 8px;
   align-content: flex-end;
+  font-size: 0;
+  line-height: 0;
 }
 
 .heatmap-square {
@@ -555,6 +557,21 @@ label {
   border-radius: 4px;
   background: rgba(148, 163, 184, 0.2);
   border: 1px solid var(--border);
+  display: inline-block;
+}
+
+.heatmap-btn {
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0;
+  line-height: 0;
+}
+
+.heatmap-btn:focus-visible {
+  outline: 2px solid rgba(124, 140, 255, 0.8);
+  outline-offset: 2px;
 }
 
 .heatmap-square.is-good {
@@ -639,6 +656,44 @@ label {
 .note-text.is-placeholder {
   color: var(--muted);
   font-style: italic;
+}
+
+.log-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  z-index: 70;
+}
+
+.log-modal.is-open {
+  display: flex;
+}
+
+.log-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 10, 20, 0.55);
+}
+
+.log-modal-panel {
+  position: relative;
+  width: min(420px, 100%);
+  z-index: 1;
+}
+
+.log-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.score-option.is-selected {
+  background: rgba(124, 140, 255, 0.2);
+  border-color: rgba(124, 140, 255, 0.5);
 }
 
 .chart-wrap {

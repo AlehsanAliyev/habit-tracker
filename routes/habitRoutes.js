@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Habit = require('../models/Habit');
-const calculateStreak = require('../utils/streakCalculator');
+const { calculateStreaks, buildDailyScoreMap, normalizeLocalYMD } = require('../utils/streakCalculator');
 const Log = require('../models/Log');
 const calculateHabitScore = require('../utils/scoreCalculator');
 const SuggestedHabit = require('../models/SuggestedHabit');
@@ -17,7 +17,7 @@ router.get('/', ensureAuthenticated, async (req, res) => {
 
     const habitsWithStats = await Promise.all(habits.map(async habit => {
       const logs = await Log.find({ habit: habit._id, user: req.session.user.id });
-      const streak = calculateStreak(logs);
+      const { activityStreak } = calculateStreaks(logs);
 
       let weeklyProgress = 0;
       const thisWeekLogs = logs.filter(log => {
@@ -29,21 +29,21 @@ router.get('/', ensureAuthenticated, async (req, res) => {
         else if (log.score === 1) weeklyProgress += 0.5;
       });
 
+      const dailyMap = buildDailyScoreMap(logs);
       const last7Days = [];
       for (let i = 6; i >= 0; i--) {
         const date = new Date(today);
         date.setDate(today.getDate() - i);
-        const dateStr = date.toISOString().split('T')[0];
-        const log = logs.find(l => l.date.toISOString().split('T')[0] === dateStr);
+        const key = normalizeLocalYMD(date);
         last7Days.push({
-          date: dateStr,
-          score: log ? log.score : null
+          date: key,
+          score: dailyMap.has(key) ? dailyMap.get(key) : null
         });
       }
 
       return {
         ...habit.toObject(),
-        streak,
+        streak: activityStreak,
         weeklyProgress: +weeklyProgress.toFixed(1),
         weeklyTarget: habit.weeklyTarget || 4,
         last7Days
@@ -105,17 +105,19 @@ router.get('/analytics', ensureAuthenticated, async (req, res) => {
 
   for (const habit of habits) {
     const allLogs = await Log.find({ habit: habit._id, user: userId }).sort({ date: 1 });
+    const dailyMap = buildDailyScoreMap(allLogs);
 
     let completionCount = 0;
-    allLogs.forEach(log => {
-      const logDate = new Date(log.date);
-      if (logDate >= fromDate && logDate <= today) {
-        if (log.score === 2) completionCount += 1;
-        else if (log.score === 1) completionCount += 0.5;
-      }
-    });
+    for (let i = 0; i < range; i++) {
+      const cursor = new Date(fromDate);
+      cursor.setDate(fromDate.getDate() + i);
+      const key = normalizeLocalYMD(cursor);
+      const score = dailyMap.get(key);
+      if (score === 2) completionCount += 1;
+      else if (score === 1) completionCount += 0.5;
+    }
 
-    const stats = calculateHabitScore(allLogs);
+    const stats = calculateHabitScore(allLogs, { weeklyTarget: habit.weeklyTarget || 0 });
     
     if (!stats) continue;
 
@@ -124,15 +126,20 @@ router.get('/analytics', ensureAuthenticated, async (req, res) => {
       frequency: habit.frequency,
       completedDays: completionCount,
       percentage: Math.round((completionCount / range) * 100),
-      streak: stats.streak,
+      streak: stats.activityStreak,
+      doneStreak: stats.doneStreak,
+      weeklyTarget: stats.weeklyTarget,
+      successDays: stats.successDays,
+      weeklyGoalProgress: stats.weeklyGoalProgress,
+      weeklyCalendarCompletion: stats.weeklyCalendarCompletion,
       badge: stats.badge,
       averageScore: stats.average,
       scoreTrend: stats.scoreTrend,
       scoreTrendLabels: JSON.stringify(stats.scoreTrend.map(d => d.week)),
       scoreTrendValues: JSON.stringify(stats.scoreTrend.map(d => d.average)),
-      heatmap: allLogs.map(log => ({
-        date: log.date.toISOString().split('T')[0],
-        score: log.score
+      heatmap: Array.from(dailyMap.entries()).map(([date, score]) => ({
+        date,
+        score
       }))
     });
   }
@@ -207,6 +214,49 @@ router.post('/edit/:id', ensureAuthenticated, async (req, res) => {
 router.get('/delete/:id', ensureAuthenticated, async (req, res) => {
   await Habit.findOneAndDelete({ _id: req.params.id, user: req.session.user.id });
   res.redirect('/habits');
+});
+
+// Upsert log for a specific date (YYYY-MM-DD)
+router.post('/:id/logs', ensureAuthenticated, async (req, res) => {
+  const habit = await Habit.findOne({ _id: req.params.id, user: req.session.user.id });
+  if (!habit) return res.status(404).json({ error: 'Habit not found' });
+
+  const { date, score } = req.body;
+  if (!date || !['0', '1', '2', 0, 1, 2, 'f'].includes(score)) {
+    return res.status(400).json({ error: 'Invalid date or score' });
+  }
+
+  const normalizedScore = score === 'f' ? 'f' : Number(score);
+  const start = new Date(`${date}T00:00:00`);
+  const end = new Date(`${date}T23:59:59.999`);
+
+  let log = await Log.findOne({
+    habit: habit._id,
+    user: req.session.user.id,
+    date: { $gte: start, $lte: end }
+  });
+
+  if (log) {
+    log.score = normalizedScore;
+    log.status = normalizedScore === 2 ? 'completed'
+      : normalizedScore === 1 ? 'partial'
+      : normalizedScore === 0 ? 'missed'
+      : 'off';
+    await log.save();
+  } else {
+    log = await Log.create({
+      habit: habit._id,
+      user: req.session.user.id,
+      date: start,
+      score: normalizedScore,
+      status: normalizedScore === 2 ? 'completed'
+        : normalizedScore === 1 ? 'partial'
+        : normalizedScore === 0 ? 'missed'
+        : 'off'
+    });
+  }
+
+  res.json({ date, score: normalizedScore });
 });
 
 module.exports = router;

@@ -60,9 +60,12 @@
         <div class="habit-meta">
           <div class="meta-line"><strong>Completion:</strong> {{percentage}}%</div>
           <div class="meta-line"><strong>Avg. score:</strong> {{averageScore}} / 2</div>
-          {{#if (gt streak 0)}}
-            <div class="meta-line"><strong>Streak:</strong> {{streak}} day{{#if (gt streak 1)}}s{{/if}}</div>
-          {{/if}}
+        <div class="meta-line">
+          <strong>Activity streak:</strong> {{streak}} day{{#if (gt streak 1)}}s{{/if}}
+        </div>
+        <div class="meta-line">
+          <strong>Done streak:</strong> {{doneStreak}} day{{#if (gt doneStreak 1)}}s{{/if}}
+        </div>
           {{#if badge}}
             <div class="meta-line"><span class="badge success">{{badge}}</span></div>
           {{/if}}

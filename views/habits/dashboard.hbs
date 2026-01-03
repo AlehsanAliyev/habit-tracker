@@ -27,7 +27,14 @@
 
         <div class="heatmap" aria-label="Last seven days">
           {{#each last7Days}}
-            <span class="heatmap-square {{#if (eq score 2)}}is-good{{else if (eq score 1)}}is-warn{{else if (eq score 0)}}is-bad{{else if (eq score 'f')}}is-muted{{else}}is-empty{{/if}}"></span>
+            <button
+              type="button"
+              class="heatmap-square heatmap-btn {{#if (eq score 2)}}is-good{{else if (eq score 1)}}is-warn{{else if (eq score 0)}}is-bad{{else if (eq score 'f')}}is-muted{{else}}is-empty{{/if}}"
+              data-habit-id="{{../_id}}"
+              data-habit-title="{{../title}}"
+              data-date="{{date}}"
+              data-score="{{score}}">
+            </button>
           {{/each}}
         </div>
 
@@ -44,3 +51,23 @@
     <p class="card-meta">You have not added any habits yet.</p>
   </div>
 {{/if}}
+
+<div class="log-modal" data-log-modal aria-hidden="true">
+  <div class="log-modal-backdrop" data-modal-close></div>
+  <div class="log-modal-panel card">
+    <div class="card-head">
+      <h3 class="card-title" data-modal-title>Log</h3>
+      <button type="button" class="btn ghost small" data-modal-close>Cancel</button>
+    </div>
+    <p class="card-meta">Date: <span data-modal-date></span></p>
+    <div class="log-options">
+      <button type="button" class="btn ghost small score-option" data-score="2">Done</button>
+      <button type="button" class="btn ghost small score-option" data-score="1">Partial</button>
+      <button type="button" class="btn ghost small score-option" data-score="0">Missed</button>
+      <button type="button" class="btn ghost small score-option" data-score="f">Off</button>
+    </div>
+    <div class="form-actions">
+      <button type="button" class="btn primary" data-modal-save>Save</button>
+    </div>
+  </div>
+</div>
