@@ -1,7 +1,9 @@
 const express = require('express');
+const { body, param } = require('express-validator');
 const router = express.Router();
 const Task = require('../models/Task');
 const { ensureAuthenticated } = require('../middleware/authMiddleware');
+const { handleValidation } = require('../middleware/validate');
 
 // Get today's tasks
 router.get('/', ensureAuthenticated, async (req, res) => {
@@ -12,7 +14,14 @@ router.get('/', ensureAuthenticated, async (req, res) => {
 });
 
 // Add new task
-router.post('/add', ensureAuthenticated, async (req, res) => {
+router.post(
+  '/add',
+  ensureAuthenticated,
+  [
+    body('title').trim().notEmpty().withMessage('Task title is required.')
+  ],
+  handleValidation,
+  async (req, res) => {
   const { title } = req.body;
   await Task.create({
     user: req.session.user.id,
@@ -22,7 +31,12 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
 });
 
 // Toggle completion
-router.post('/toggle/:id', ensureAuthenticated, async (req, res) => {
+router.post(
+  '/toggle/:id',
+  ensureAuthenticated,
+  [param('id').isMongoId().withMessage('Invalid task id.')],
+  handleValidation,
+  async (req, res) => {
   const task = await Task.findOne({ _id: req.params.id, user: req.session.user.id });
   if (task) {
     task.isCompleted = !task.isCompleted;

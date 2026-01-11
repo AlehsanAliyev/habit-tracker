@@ -10,6 +10,7 @@
 
 <div class="card">
   <form action="/journal/add" method="POST">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <div class="form-grid">
       <div class="form-field">
         <label for="morningNote">Morning Note</label>

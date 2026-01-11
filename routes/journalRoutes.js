@@ -1,7 +1,9 @@
 const express = require('express');
+const { body, param } = require('express-validator');
 const router = express.Router();
 const Journal = require('../models/Journal');
 const { ensureAuthenticated } = require('../middleware/authMiddleware');
+const { handleValidation } = require('../middleware/validate');
 
 // Show all journals
 router.get('/', ensureAuthenticated, async (req, res) => {
@@ -14,7 +16,15 @@ router.get('/add', ensureAuthenticated, (req, res) => {
   res.render('journal/form', { title: 'New Journal Entry' });
 });
 
-router.post('/add', ensureAuthenticated, async (req, res) => {
+router.post(
+  '/add',
+  ensureAuthenticated,
+  [
+    body('morningNote').trim().isLength({ max: 2000 }).withMessage('Morning note is too long.'),
+    body('eveningNote').trim().isLength({ max: 2000 }).withMessage('Evening note is too long.')
+  ],
+  handleValidation,
+  async (req, res) => {
   const { morningNote, eveningNote } = req.body;
   await Journal.create({
     user: req.session.user.id,
@@ -31,7 +41,16 @@ router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
   res.render('journal/form', { title: 'Edit Journal Entry', entry });
 });
 
-router.post('/edit/:id', ensureAuthenticated, async (req, res) => {
+router.post(
+  '/edit/:id',
+  ensureAuthenticated,
+  [
+    param('id').isMongoId().withMessage('Invalid journal id.'),
+    body('morningNote').trim().isLength({ max: 2000 }).withMessage('Morning note is too long.'),
+    body('eveningNote').trim().isLength({ max: 2000 }).withMessage('Evening note is too long.')
+  ],
+  handleValidation,
+  async (req, res) => {
   const { morningNote, eveningNote } = req.body;
   await Journal.findOneAndUpdate(
     { _id: req.params.id, user: req.session.user.id },

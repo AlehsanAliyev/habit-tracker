@@ -1,4 +1,5 @@
 const express = require('express');
+const { body, param } = require('express-validator');
 const router = express.Router();
 const Habit = require('../models/Habit');
 const { calculateStreaks, buildDailyScoreMap, normalizeLocalYMD } = require('../utils/streakCalculator');
@@ -6,6 +7,7 @@ const Log = require('../models/Log');
 const calculateHabitScore = require('../utils/scoreCalculator');
 const SuggestedHabit = require('../models/SuggestedHabit');
 const { ensureAuthenticated } = require('../middleware/authMiddleware');
+const { handleValidation } = require('../middleware/validate');
 
 // Dashboard Route
 router.get('/', ensureAuthenticated, async (req, res) => {
@@ -45,7 +47,7 @@ router.get('/', ensureAuthenticated, async (req, res) => {
         ...habit.toObject(),
         streak: activityStreak,
         weeklyProgress: +weeklyProgress.toFixed(1),
-        weeklyTarget: habit.weeklyTarget || 4,
+        weeklyTarget: habit.weeklyTarget || null,
         last7Days
       };
     }));
@@ -66,7 +68,15 @@ router.get('/suggested', ensureAuthenticated, async (req, res) => {
   res.render('habits/suggestedList', { title: 'Suggested Habits', suggestions });
 });
 
-router.post('/add-from-suggestion', ensureAuthenticated, async (req, res) => {
+router.post(
+  '/add-from-suggestion',
+  ensureAuthenticated,
+  [
+    body('title').trim().notEmpty().withMessage('Title is required.'),
+    body('frequency').isIn(['daily', 'weekly', 'monthly']).withMessage('Invalid frequency.')
+  ],
+  handleValidation,
+  async (req, res) => {
   const { title, frequency } = req.body;
 
   try {
@@ -177,7 +187,19 @@ router.get('/add', ensureAuthenticated, (req, res) => {
   res.render('habits/addHabit', { title: 'Add Habit' });
 });
 
-router.post('/add', ensureAuthenticated, async (req, res) => {
+router.post(
+  '/add',
+  ensureAuthenticated,
+  [
+    body('title').trim().notEmpty().withMessage('Title is required.'),
+    body('frequency').isIn(['daily', 'weekly', 'monthly']).withMessage('Invalid frequency.'),
+    body('weeklyTarget')
+      .optional({ checkFalsy: true })
+      .isInt({ min: 1, max: 7 })
+      .withMessage('Weekly target must be between 1 and 7.')
+  ],
+  handleValidation,
+  async (req, res) => {
   const { title, frequency, weeklyTarget } = req.body;
   try {
     const newHabit = new Habit({
@@ -201,7 +223,20 @@ router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
   res.render('habits/editHabit', { title: 'Edit Habit', habit });
 });
 
-router.post('/edit/:id', ensureAuthenticated, async (req, res) => {
+router.post(
+  '/edit/:id',
+  ensureAuthenticated,
+  [
+    param('id').isMongoId().withMessage('Invalid habit id.'),
+    body('title').trim().notEmpty().withMessage('Title is required.'),
+    body('frequency').isIn(['daily', 'weekly', 'monthly']).withMessage('Invalid frequency.'),
+    body('weeklyTarget')
+      .optional({ checkFalsy: true })
+      .isInt({ min: 1, max: 7 })
+      .withMessage('Weekly target must be between 1 and 7.')
+  ],
+  handleValidation,
+  async (req, res) => {
   const { title, frequency, weeklyTarget } = req.body;
   await Habit.findOneAndUpdate(
     { _id: req.params.id, user: req.session.user.id },
@@ -217,14 +252,20 @@ router.get('/delete/:id', ensureAuthenticated, async (req, res) => {
 });
 
 // Upsert log for a specific date (YYYY-MM-DD)
-router.post('/:id/logs', ensureAuthenticated, async (req, res) => {
+router.post(
+  '/:id/logs',
+  ensureAuthenticated,
+  [
+    param('id').isMongoId().withMessage('Invalid habit id.'),
+    body('date').matches(/^\d{4}-\d{2}-\d{2}$/).withMessage('Invalid date.'),
+    body('score').custom(value => ['0', '1', '2', 0, 1, 2, 'f'].includes(value)).withMessage('Invalid score.')
+  ],
+  handleValidation,
+  async (req, res) => {
   const habit = await Habit.findOne({ _id: req.params.id, user: req.session.user.id });
   if (!habit) return res.status(404).json({ error: 'Habit not found' });
 
   const { date, score } = req.body;
-  if (!date || !['0', '1', '2', 0, 1, 2, 'f'].includes(score)) {
-    return res.status(400).json({ error: 'Invalid date or score' });
-  }
 
   const normalizedScore = score === 'f' ? 'f' : Number(score);
   const start = new Date(`${date}T00:00:00`);

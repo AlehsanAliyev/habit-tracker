@@ -10,6 +10,7 @@
 
 <div class="card">
   <form action="/habits/edit/{{habit._id}}" method="POST">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <div class="form-grid">
       <div class="form-field">
         <label for="title">Habit Title</label>

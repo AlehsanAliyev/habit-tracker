@@ -37,6 +37,8 @@
     });
   });
 
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
   const modal = document.querySelector('[data-log-modal]');
   if (modal) {
     const titleEl = modal.querySelector('[data-modal-title]');
@@ -103,7 +105,10 @@
 
       const response = await fetch(`/habits/${activeHabitId}/logs`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(csrfToken ? { 'csrf-token': csrfToken } : {})
+        },
         body: JSON.stringify({ date: activeDate, score: selectedScore })
       });
 

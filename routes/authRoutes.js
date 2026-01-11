@@ -1,6 +1,9 @@
 // routes/authRoutes.js
 const express = require('express');
+const { body } = require('express-validator');
+const rateLimit = require('express-rate-limit');
 const authController = require('../controllers/authController');
+const { handleValidation } = require('../middleware/validate');
 
 const router = express.Router();
 
@@ -12,9 +15,35 @@ router.get('/register', (req, res) => {
   res.render('auth/register', { title: 'Register' });
 });
 
-router.post('/register', authController.registerUser);
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+router.post(
+  '/register',
+  authLimiter,
+  [
+    body('username').trim().isLength({ min: 2 }).withMessage('Username must be at least 2 characters.'),
+    body('email').trim().isEmail().withMessage('Enter a valid email.'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters.')
+  ],
+  handleValidation,
+  authController.registerUser
+);
 // POST: Login user
-router.post('/login', authController.loginUser);
+router.post(
+  '/login',
+  authLimiter,
+  [
+    body('email').trim().isEmail().withMessage('Enter a valid email.'),
+    body('password').notEmpty().withMessage('Password is required.')
+  ],
+  handleValidation,
+  authController.loginUser
+);
 
 router.get('/logout', (req, res) => {
   req.session.destroy(() => {

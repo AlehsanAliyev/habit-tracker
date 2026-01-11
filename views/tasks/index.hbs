@@ -7,6 +7,7 @@
 
 <div class="card">
   <form action="/tasks/add" method="POST" class="form-row">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <div class="form-field grow">
       <label for="title">New Task</label>
       <input class="input" type="text" id="title" name="title" placeholder="Add a new task" required>
@@ -19,6 +20,7 @@
       <li class="row">
         <div class="row-left">
           <form action="/tasks/toggle/{{this._id}}" method="POST">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <button type="submit" class="btn ghost small" aria-label="Toggle completion">
               {{#if this.isCompleted}}Done{{else}}Mark done{{/if}}
             </button>

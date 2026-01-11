@@ -1,8 +1,10 @@
 const express = require('express');
+const { body, param } = require('express-validator');
 const router = express.Router();
 const Log = require('../models/Log');
 const Habit = require('../models/Habit');
 const { ensureAuthenticated } = require('../middleware/authMiddleware');
+const { handleValidation } = require('../middleware/validate');
 
 // Show all logs (optional)
 router.get('/', ensureAuthenticated, async (req, res) => {
@@ -32,7 +34,15 @@ router.get('/add/:habitId', ensureAuthenticated, async (req, res) => {
 });
 
 // Show log form for a habit
-router.post('/add/:habitId', ensureAuthenticated, async (req, res) => {
+router.post(
+  '/add/:habitId',
+  ensureAuthenticated,
+  [
+    param('habitId').isMongoId().withMessage('Invalid habit id.'),
+    body('status').isIn(['completed', 'partial', 'off', 'missed']).withMessage('Invalid status.')
+  ],
+  handleValidation,
+  async (req, res) => {
   const { status } = req.body;
   const logDate = new Date().toISOString().split('T')[0];
 

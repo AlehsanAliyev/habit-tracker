@@ -19,6 +19,7 @@
           </div>
           <div class="row-right">
             <form action="/habits/add-from-suggestion" method="POST">
+              <input type="hidden" name="_csrf" value="{{csrfToken}}">
               <input type="hidden" name="title" value="{{title}}">
               <input type="hidden" name="frequency" value="{{frequency}}">
               <button type="submit" class="btn primary small">Add</button>
